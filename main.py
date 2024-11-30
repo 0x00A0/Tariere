@@ -1,14 +1,21 @@
-from tkinter import image_names
-
 from PIL.ImageCms import Flags
 
 import docker_helper
 import tariere
+import csv
 from time import sleep
+
+image_names = [
+#    'noorabh/group4_passoire:latest',
+    'luiar/passoire-secured'
+#    'jadypamella/passoire:latest',
+#    'nharrand/passoire:latest', 
+#    '0x00a0/passoire_group06:latest'
+]
+
 
 def main():
     docker_helper.stop_and_remove_all(['passoire_test','passoire_nh'])
-    image_names=['nharrand/passoire:latest', '0x00a0/passoire_group06:latest']
     for image_name in image_names:
         print("\033[1;41m",'#'*50,"\033[0m")
         print(f"\033[1;41m Attacking image {image_name}\033[0m ")
@@ -35,6 +42,11 @@ def main():
         finally:
             docker_helper.stop_and_remove_all(['passoire_test','passoire_nh'])
             print(f"\033[1;42mFlags found: {len(flags)}\033[0m")
+            # save to csv, named after the image
+            with open(f'flags/{image_name.replace("/","_").replace(":","_")}.csv', mode='w') as file:
+                writer = csv.writer(file, delimiter=' ', quoting=csv.QUOTE_MINIMAL)
+                writer.writerows(flags.items())
+            
 
 if __name__ == '__main__':
     main()

