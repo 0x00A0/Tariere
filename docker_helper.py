@@ -2,16 +2,16 @@ import docker
 
 def get_and_run_passoire(image_name = 'nharrand/passoire:latest', env: dict = None, ports: dict = None):
     client = docker.from_env()
-    print(f"Pulling image {image_name}...")
+    print(f"\033[1;46mPulling image {image_name}...\033[0m")
     client.images.pull(image_name)
-    print(f"Image {image_name} is pulled.")
+    print(f"\033[1;46mImage {image_name} is pulled.\033[0m")
     container = client.containers.run(
         image_name,
         detach=True,
         environment=env,
         ports=ports
     )
-    print(f"Container {container.name} (ID: {container.short_id}) is running.")
+    print(f"\033[1;46mContainer {container.name} (ID: {container.short_id}) is running.\033[0m")
     return container
 
 def stop_and_remove_all(containers_to_keep):
@@ -24,33 +24,15 @@ def stop_and_remove_all(containers_to_keep):
 
     for container in containers:
         if container.name in containers_to_keep:
-            print(f"Skipping container {container.name}, as it is to be kept.")
+            # print(f"\033[1;46mSkipping container {container.name}, as it is to be kept.")
             continue
         try:
             if container.status in ["running", "restarting", "paused"]:
-                print(f"Stopping container {container.name}...")
+                print(f"\033[1;46mStopping container {container.short_id}...\033[0m")
                 container.stop()
 
-            print(f"Removing container {container.name}...")
+            print(f"\033[1;46mRemoving container {container.short_id}...\033[0m")
             container.remove()
-            print(f"Container {container.name} has been removed.")
+            print(f"\033[1;46mContainer {container.short_id} has been removed.\033[0m")
         except Exception as e:
-            print(f"An error occurred with container {container.name}: {e}")
-
-
-# test
-if __name__ == '__main__':
-    passoire = get_and_run_passoire(
-        env={
-            "GROUP_SECRET": "3833fa622ce58c76782d5505e72d4a13b0b91c01",
-            "HOST": "localhost"
-        },
-        ports={
-            "80/tcp": 10080,
-            "3002/tcp": 13002,
-            "22/tcp": 10022,
-            "3306/tcp": 13306
-        }
-    )
-    input("Press Enter to stop the container...")
-    stop_and_remove_all(['passoire_test','passoire_nh'])
+            print(f"\033[1;46mAn error occurred with container {container.short_id}: {e}\033[0m")
