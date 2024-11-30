@@ -1,4 +1,4 @@
-from PIL.ImageCms import Flags
+
 
 import docker_helper
 import tariere
@@ -6,11 +6,11 @@ import csv
 from time import sleep
 
 image_names = [
-#    'noorabh/group4_passoire:latest',
-    'luiar/passoire-secured'
-#    'jadypamella/passoire:latest',
+    'noorabh/group4_passoire:latest',
+    'katjawi23/passoire_base:latest',
+    'jadypamella/passoire:latest',
 #    'nharrand/passoire:latest', 
-#    '0x00a0/passoire_group06:latest'
+    '0x00a0/passoire_group06:latest'
 ]
 
 
@@ -33,14 +33,16 @@ def main():
                 "3306/tcp": 13306
             }
         )
-        sleep(5)
+        sleep(10)
         try:
             flags = {}
-            flags.update(tariere.ssh_backdoor())
+            # flags.update(tariere.ssh_backdoor())
+            # tariere.http_get()
+            tariere.sql()
         except Exception as e:
             print(f"An error occurred: {e}")
         finally:
-            docker_helper.stop_and_remove_all(['passoire_test','passoire_nh'])
+            #docker_helper.stop_and_remove_all(['passoire_test','passoire_nh'])
             print(f"\033[1;42mFlags found: {len(flags)}\033[0m")
             # save to csv, named after the image
             with open(f'flags/{image_name.replace("/","_").replace(":","_")}.csv', mode='w') as file:
