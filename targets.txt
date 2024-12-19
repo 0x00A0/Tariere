@@ -1,1 +1,0 @@
-victorlejon/intsec_defense:latest

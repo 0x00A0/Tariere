@@ -2,8 +2,10 @@
 
 import csv
 import os
+from itertools import count
 
 flags = []
+c = 0
 for filename in os.listdir('flags'):
     with open(f'flags/{filename}', mode='r') as file:
         reader = csv.reader(file, delimiter=' ')
@@ -11,8 +13,10 @@ for filename in os.listdir('flags'):
         if _flags == []:
             continue
         for row in _flags:
-            if row==[]:
+            if row==[] or "Permission denied" in row[1]:
                 continue
+            if len(row[1])==40:
+                c+=1
             flags.append(['.'.join(filename.split('.')[:-1]), row[0], row[1]])
             
 with open('flags.csv', mode='w', newline='') as file:
@@ -20,4 +24,5 @@ with open('flags.csv', mode='w', newline='') as file:
     writer.writerows(flags)
     
 print(f"Flags assembled in flags.csv")
+print(f"Total flags: {c}")
 

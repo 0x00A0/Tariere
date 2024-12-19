@@ -23,6 +23,9 @@ def ssh_backdoor():
                 if "Authentication failed" in str(e):
                     print("\033[1;31mBackdoor Authentication failed, stop attacking with SSH\033[0m")
                     return {}
+        else:
+            print(f"\033[1;31mError: {e}\033[0m")
+            return {}
 
     ssh.exec_command("cd /; ls")
     
@@ -62,6 +65,7 @@ def ssh_backdoor():
     if "Permission denied" in res:
         print("\033[1;31mFlag 3 Permission denied\033[0m")
     elif "No such file or directory" in res:
+        flags['flag_3'] = "Flag Deleted"
         print("\033[1;31mFlag 3 not found, might be deleted\033[0m")
     else:
         flags['flag_3'] = res.split('\n')[0].split(" ")[-1].replace(".", "")
@@ -85,6 +89,7 @@ def ssh_backdoor():
         flags['flag_4'] = flag_4
         print(f"Flag 4: {flags['flag_4']}")
     else:
+        flags['flag_4'] = "Flag Deleted"
         print("\033[1;31mFlag 4 not found, might be deleted\033[0m")
         
     # ============================
@@ -98,6 +103,7 @@ def ssh_backdoor():
     if "Permission denied" in res:
         print("\033[1;31mFlag 5 Permission denied\033[0m")
     elif "No such file or directory" in res:
+        flags['flag_5'] = "Flag Deleted"
         print("\033[1;31mFlag 5 not found, might be deleted\033[0m")
     else:
         lines = res.split('\n')
@@ -121,6 +127,7 @@ def ssh_backdoor():
     if "Permission denied" in res:
         print("\033[1;31mFlag 6 Permission denied\033[0m")
     elif "No such file or directory" in res:
+        flags['flag_6'] = "Flag Deleted"
         print("\033[1;31mFlag 6 not found, might be deleted\033[0m")
     else:
         flags['flag_6'] = res.split('\n')[0].split(" ")[-1].replace(".", "")
@@ -137,6 +144,7 @@ def ssh_backdoor():
     if "Permission denied" in res:
         print("\033[1;31mFlag 7 Permission denied\033[0m")
     elif "No such file or directory" in res:
+        flags['flag_7'] = "Flag Deleted"
         print("\033[1;31mFlag 7 not found, might be deleted\033[0m")
     else:
         flags['flag_7'] = res.split('\n')[0].split(" ")[-1].replace(".", "")
@@ -159,6 +167,7 @@ def ssh_backdoor():
     if "Permission denied" in res:
         print("\033[1;31mFlag 9 Permission denied\033[0m")
     elif "No such file or directory" in res:
+        flags['flag_9'] = "Flag Deleted"
         print("\033[1;31mFlag 9 not found, might be deleted\033[0m")
     else:
         flags['flag_9'] = res.split('\n')[0].split(" ")[-1].replace(".", "")
@@ -182,6 +191,7 @@ def ssh_backdoor():
         flags['flag_10'] = flag_10
         print(f"Flag 10: {flags['flag_10']}")
     else:
+        flags['flag_10'] = "Flag Deleted"
         print("\033[1;31mFlag 10 not found, might be deleted\033[0m")
     
     # ============================
@@ -192,6 +202,7 @@ def ssh_backdoor():
     res, err = stdout.read(), stderr.read()
     result = res if res else err
     if "No such file or directory" in result.decode(encoding="utf-8"):
+        flags['flag_11'] = "Flag Deleted"
         print("\033[1;31mFlag 11 not found, might be deleted\033[0m")
     elif "Permission denied" in result.decode(encoding="utf-8"):
         print("\033[1;31mFlag 11 Permission denied\033[0m")
@@ -224,6 +235,7 @@ def ssh_backdoor():
         flags['flag_13'] = flag_13
         print(f"Flag 13: {flags['flag_13']}")
     else:
+        flags['flag_13'] = "Flag Deleted"
         print("\033[1;31mFlag 13 not found, might be deleted\033[0m")
     
     # ============================
@@ -237,6 +249,7 @@ def ssh_backdoor():
     if "Permission denied" in res:
         print("\033[1;31mFlag 14 Permission denied\033[0m")
     elif "No such file or directory" in res:
+        flags['flag_14'] = "Flag Deleted"
         print("\033[1;31mFlag 14 not found, might be deleted\033[0m")
     else:
         flags['flag_14'] = res.split('\n')[0].split(" ")[-1].replace(".", "")
